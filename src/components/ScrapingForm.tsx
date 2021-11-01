@@ -1,8 +1,31 @@
 import { Form,Button } from "react-bootstrap";
- 
-export default function ScrapingForm(){
-  fetch("https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed/precos/anos-anteriores/anos-anteriores").then(e => console.log(e)).catch(()=> console.warn("Fetch failed"));
+import axios from 'axios';
+import cheerio from 'cheerio';
 
+export default function ScrapingForm(){
+  const url = 'https://www.gov.br/anvisa/pt-br/assuntos/medicamentos/cmed/precos/anos-anteriores/anos-anteriores'; // URL we're scraping
+  const AxiosInstance = axios.create(); // Create a new Axios Instance
+
+// This is the structure of the player data we recieve
+  interface PlayerData {
+    rank: number; // 1 - 20 rank
+    name: string;
+    nationality: string;
+    goals: number;
+  }
+
+// Send an async HTTP Get request to the url
+AxiosInstance.get(url)
+  .then( // Once we have data returned ...
+    response => {
+      const html = response.data; // Get the HTML from the HTTP request
+      const $ = cheerio.load(html); // Load the HTML string into cheerio
+      
+      console.log($);
+    }
+  )
+  .catch(console.error); // Error handling
+    
   return (
       <Form>
         <Form.Group>
